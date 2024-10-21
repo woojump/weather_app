@@ -19,6 +19,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   late String cityName;
   late int temperature;
+  var date = DateTime.now();
 
   @override
   void initState() {
@@ -31,6 +32,11 @@ class _WeatherScreenState extends State<WeatherScreen> {
     cityName = weatherData['name'];
     double doubleTemperature = weatherData['main']['temp'];
     temperature = doubleTemperature.round();
+  }
+
+  String getSystemTime() {
+    var now = DateTime.now();
+    return DateFormat('h:mm a').format(now);
   }
 
   @override
@@ -61,24 +67,46 @@ class _WeatherScreenState extends State<WeatherScreen> {
             width: double.infinity,
             height: double.infinity,
           ),
-          const Padding(
-            padding: EdgeInsets.all(20.0),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
-                    Text('city'),
+                    Text(
+                      cityName,
+                      style: GoogleFonts.lato(
+                        fontSize: 35.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('time'),
-                        Text('day'),
-                        Text('date'),
+                        TimerBuilder.periodic(
+                          const Duration(minutes: 1),
+                          builder: (context) => Text(
+                            getSystemTime(),
+                            style: GoogleFonts.lato(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          DateFormat(' - EEEE, d MMM, yyy').format(date),
+                          style: GoogleFonts.lato(
+                            fontSize: 16.0,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ],
                 ),
-                Column(
+                const Column(
                   children: [
                     Text('temperature'),
                     Row(
@@ -89,7 +117,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ],
                 ),
-                Column(
+                const Column(
                   children: [
                     Divider(
                       height: 15.0,

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/models/model.dart';
 
 class WeatherScreen extends StatefulWidget {
   final dynamic parseWeatherData;
@@ -18,8 +19,11 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   late String cityName;
-  late int temperature;
   var date = DateTime.now();
+  late int temperature;
+  late int condition;
+  late Widget weatherIcon;
+  late String description;
 
   @override
   void initState() {
@@ -32,6 +36,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
     cityName = weatherData['name'];
     double doubleTemperature = weatherData['main']['temp'];
     temperature = doubleTemperature.round();
+    condition = weatherData['weather'][0]['id'];
+    Model model = Model();
+    weatherIcon = model.getWeatherIcon(condition);
+    description = weatherData['weather'][0]['description'];
   }
 
   String getSystemTime() {
@@ -106,13 +114,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ],
                 ),
-                const Column(
+                Column(
                   children: [
-                    Text('temperature'),
-                    Row(
+                    Text(
+                      '$temperature\u2103',
+                      style: GoogleFonts.lato(
+                        fontSize: 85.0,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Column(
                       children: [
-                        Text('weatherImage'),
-                        Text('description'),
+                        weatherIcon,
+                        Text(
+                          description,
+                          style: GoogleFonts.lato(
+                            fontSize: 16.0,
+                            color: Colors.black,
+                          ),
+                        ),
                       ],
                     ),
                   ],

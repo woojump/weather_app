@@ -15,7 +15,8 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   late final double latitude;
   late final double longitude;
-  late final weatherData;
+  late final dynamic weatherData;
+  late final dynamic airData;
 
   @override
   void initState() {
@@ -30,16 +31,18 @@ class _LoadingState extends State<Loading> {
     latitude = myLocation.myLatitude;
     longitude = myLocation.myLongitude;
 
-    Network network = Network(
-        url:
-            'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
-    weatherData = await network.getJsonData();
+    Network network = Network();
+    weatherData = await network.getJsonData(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
+    airData = await network.getJsonData(
+        'http://api.openweathermap.org/data/2.5/air_pollution?lat=$latitude&lon=$longitude&appid=$apiKey');
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => WeatherScreen(
           parseWeatherData: weatherData,
+          parseAirData: airData,
         ),
       ),
     );

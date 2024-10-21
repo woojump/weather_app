@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/models/model.dart';
 
 class WeatherScreen extends StatefulWidget {
   final dynamic parseWeatherData;
+  final dynamic parseAirData;
 
   const WeatherScreen({
     super.key,
     required this.parseWeatherData,
+    required this.parseAirData,
   });
 
   @override
@@ -21,25 +22,43 @@ class _WeatherScreenState extends State<WeatherScreen> {
   late String cityName;
   var date = DateTime.now();
   late int temperature;
-  late int condition;
+  late int weatherCondition;
   late Widget weatherIcon;
   late String description;
+  late int airCondition;
+  late Widget airIcon;
+  late String airState;
+  late double fineDust;
+  late double ultraFineDust;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    updateData(widget.parseWeatherData);
+    print(widget.parseAirData);
+    updateData(
+      weatherData: widget.parseWeatherData,
+      airData: widget.parseAirData,
+    );
   }
 
-  void updateData(dynamic weatherData) {
+  void updateData({dynamic weatherData, dynamic airData}) {
     cityName = weatherData['name'];
     double doubleTemperature = weatherData['main']['temp'];
     temperature = doubleTemperature.round();
-    condition = weatherData['weather'][0]['id'];
+
     Model model = Model();
-    weatherIcon = model.getWeatherIcon(condition);
+
+    weatherCondition = weatherData['weather'][0]['id'];
+    weatherIcon = model.getWeatherIcon(weatherCondition);
     description = weatherData['weather'][0]['description'];
+
+    airCondition = airData['list'][0]['main']['aqi'];
+    airIcon = model.getAirIcon(airCondition);
+    airState = model.getAirState(airCondition);
+
+    fineDust = airData['list'][0]['components']['pm2_5'];
+    ultraFineDust = airData['list'][0]['components']['pm10'];
   }
 
   String getSystemTime() {
@@ -76,9 +95,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
             height: double.infinity,
           ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 100.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
@@ -138,18 +157,107 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ],
                 ),
-                const Column(
+                Column(
                   children: [
-                    Divider(
+                    const Divider(
                       height: 15.0,
                       thickness: 2.0,
                       color: Colors.white30,
                     ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(),
-                        Column(),
-                        Column(),
+                        Column(
+                          children: [
+                            Text(
+                              'AQI(대기질지수)',
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            airIcon,
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              airState,
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '미세먼지',
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              '$fineDust',
+                              style: GoogleFonts.lato(
+                                fontSize: 24.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              'μg/m3',
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              '초미세먼지',
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              '$ultraFineDust',
+                              style: GoogleFonts.lato(
+                                fontSize: 24.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              'μg/m3',
+                              style: GoogleFonts.lato(
+                                fontSize: 16.0,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ],

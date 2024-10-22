@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weather_app/data/my_location.dart';
 import 'package:weather_app/data/network.dart';
 import 'package:weather_app/screens/weather_screen.dart';
@@ -50,6 +51,23 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      body: Stack(
+        children: [
+          Image.asset(
+            'image/background.jpg',
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          const Center(
+            child: SpinKitDoubleBounce(
+              color: Colors.white,
+              size: 200.0,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

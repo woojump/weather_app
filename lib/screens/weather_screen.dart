@@ -1,64 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/models/weather_info_display_model.dart';
+import 'package:weather_app/models/air_model.dart';
+import 'package:weather_app/models/weather_model.dart';
 
 class WeatherScreen extends StatefulWidget {
-  final dynamic parseWeatherData;
-  final dynamic parseAirData;
+  final WeatherInfo weatherInfo;
+  final AirInfo airInfo;
 
   const WeatherScreen({
     super.key,
-    required this.parseWeatherData,
-    required this.parseAirData,
+    required this.weatherInfo,
+    required this.airInfo,
   });
 
   @override
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
-class _WeatherScreenState extends State<WeatherScreen>
-    with WeatherInfoDisplayModel {
-  late String cityName;
-  var date = DateTime.now();
-  late int temperature;
-  late int weatherCondition;
-  late Widget weatherIcon;
-  late String description;
-  late int airCondition;
-  late Widget airIcon;
-  late String airState;
-  late double fineDust;
-  late double ultraFineDust;
-
-  @override
-  void initState() {
-    super.initState();
-    updateData(
-      weatherData: widget.parseWeatherData,
-      airData: widget.parseAirData,
-    );
-  }
-
-  void updateData({dynamic weatherData, dynamic airData}) {
-    cityName = weatherData['name'];
-    double doubleTemperature = weatherData['main']['temp'];
-    temperature = doubleTemperature.round();
-    temperature = weatherData['main']['temp'].round();
-
-    weatherCondition = weatherData['weather'][0]['id'];
-    weatherIcon = getWeatherIcon(weatherCondition);
-    description = weatherData['weather'][0]['description'];
-
-    airCondition = airData['list'][0]['main']['aqi'];
-    airIcon = getAirIcon(airCondition);
-    airState = getAirState(airCondition);
-
-    fineDust = airData['list'][0]['components']['pm2_5'];
-    ultraFineDust = airData['list'][0]['components']['pm10'];
-  }
-
+class _WeatherScreenState extends State<WeatherScreen> {
   String getSystemTime() {
     var now = DateTime.now();
     return DateFormat('h:mm a').format(now);
@@ -83,7 +45,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                 Column(
                   children: [
                     Text(
-                      cityName,
+                      widget.weatherInfo.name,
                       style: GoogleFonts.lato(
                         fontSize: 35.0,
                         fontWeight: FontWeight.bold,
@@ -104,7 +66,8 @@ class _WeatherScreenState extends State<WeatherScreen>
                           ),
                         ),
                         Text(
-                          DateFormat(' - EEEE, d MMM, yyy').format(date),
+                          DateFormat(' - EEEE, d MMM, yyy')
+                              .format(DateTime.now()),
                           style: GoogleFonts.lato(
                             fontSize: 16.0,
                             color: Colors.white,
@@ -117,7 +80,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                 Column(
                   children: [
                     Text(
-                      '$temperature\u2103',
+                      '${widget.weatherInfo.temperature}\u2103',
                       style: GoogleFonts.lato(
                         fontSize: 85.0,
                         fontWeight: FontWeight.w300,
@@ -126,9 +89,11 @@ class _WeatherScreenState extends State<WeatherScreen>
                     ),
                     Column(
                       children: [
-                        weatherIcon,
+                        SvgPicture.asset(
+                          widget.weatherInfo.condition.imagePath,
+                        ),
                         Text(
-                          description,
+                          widget.weatherInfo.description,
                           style: GoogleFonts.lato(
                             fontSize: 16.0,
                             color: Colors.black,
@@ -145,9 +110,7 @@ class _WeatherScreenState extends State<WeatherScreen>
                       thickness: 2.0,
                       color: Colors.white30,
                     ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
+                    const SizedBox(height: 20.0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -160,15 +123,15 @@ class _WeatherScreenState extends State<WeatherScreen>
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
+                            const SizedBox(height: 10.0),
+                            Image.asset(
+                              widget.airInfo.condition.imagePath,
+                              width: 37.0,
+                              height: 35.0,
                             ),
-                            airIcon,
-                            const SizedBox(
-                              height: 10.0,
-                            ),
+                            const SizedBox(height: 10.0),
                             Text(
-                              airState,
+                              widget.airInfo.condition.text,
                               style: GoogleFonts.lato(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
@@ -186,19 +149,15 @@ class _WeatherScreenState extends State<WeatherScreen>
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
+                            const SizedBox(height: 10.0),
                             Text(
-                              '$fineDust',
+                              widget.airInfo.fineDust.toString(),
                               style: GoogleFonts.lato(
                                 fontSize: 24.0,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
+                            const SizedBox(height: 10.0),
                             Text(
                               'μg/m3',
                               style: GoogleFonts.lato(
@@ -217,19 +176,15 @@ class _WeatherScreenState extends State<WeatherScreen>
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
+                            const SizedBox(height: 10.0),
                             Text(
-                              '$ultraFineDust',
+                              widget.airInfo.ultraFineDust.toString(),
                               style: GoogleFonts.lato(
                                 fontSize: 24.0,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(
-                              height: 10.0,
-                            ),
+                            const SizedBox(height: 10.0),
                             Text(
                               'μg/m3',
                               style: GoogleFonts.lato(

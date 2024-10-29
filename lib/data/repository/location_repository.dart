@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class MyLocation {
-  late final double myLatitude;
-  late final double myLongitude;
+abstract class LocationRepository {
+  Future<Position?> getMyCurrentLocation();
+}
 
-  Future<void> getMyCurrentLocation() async {
+class LocationRepositoryImpl implements LocationRepository {
+  @override
+  Future<Position?> getMyCurrentLocation() async {
     try {
       await Geolocator.requestPermission();
-      Position position = await Geolocator.getCurrentPosition(
+      return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      myLatitude = position.latitude;
-      myLongitude = position.longitude;
     } catch (e) {
       debugPrint('error in getMyCurrentLocation()');
+      return null;
     }
   }
 }

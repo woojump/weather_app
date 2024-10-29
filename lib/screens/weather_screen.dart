@@ -5,6 +5,7 @@ import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/models/air_model.dart';
 import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/screens/widgets/weather_info_box.dart';
 
 class WeatherScreen extends StatefulWidget {
   final WeatherInfo weatherInfo;
@@ -38,7 +39,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
             height: double.infinity,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(30.0, 100.0, 30.0, 100.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30.0,
+              vertical: 100.0,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -66,8 +70,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           ),
                         ),
                         Text(
-                          DateFormat(' - EEEE, d MMM, yyy')
-                              .format(DateTime.now()),
+                          DateFormat(' - EEEE, d MMM, yyy').format(
+                            DateTime.now(),
+                          ),
                           style: GoogleFonts.lato(
                             fontSize: 16.0,
                             color: Colors.white,
@@ -114,85 +119,36 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              'AQI(대기질지수)',
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 10.0),
-                            Image.asset(
-                              widget.airInfo.condition.imagePath,
-                              width: 37.0,
-                              height: 35.0,
-                            ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              widget.airInfo.condition.text,
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
+                        WeatherInfoBox(
+                          title: 'AQI(대기질지수)',
+                          valueIndicator: Image.asset(
+                            widget.airInfo.condition.imagePath,
+                            width: 37.0,
+                            height: 35.0,
+                          ),
+                          unitString: widget.airInfo.condition.text,
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '미세먼지',
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                              ),
+                        WeatherInfoBox(
+                          title: '미세먼지',
+                          valueIndicator: Text(
+                            widget.airInfo.fineDust.toString(),
+                            style: GoogleFonts.lato(
+                              fontSize: 24.0,
+                              color: Colors.white,
                             ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              widget.airInfo.fineDust.toString(),
-                              style: GoogleFonts.lato(
-                                fontSize: 24.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              'μg/m3',
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
+                          ),
+                          unitString: 'μg/m3',
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '초미세먼지',
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                              ),
+                        WeatherInfoBox(
+                          title: '초미세먼지',
+                          valueIndicator: Text(
+                            widget.airInfo.ultraFineDust.toString(),
+                            style: GoogleFonts.lato(
+                              fontSize: 24.0,
+                              color: Colors.white,
                             ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              widget.airInfo.ultraFineDust.toString(),
-                              style: GoogleFonts.lato(
-                                fontSize: 24.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 10.0),
-                            Text(
-                              'μg/m3',
-                              style: GoogleFonts.lato(
-                                fontSize: 16.0,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          ],
+                          ),
+                          unitString: 'μg/m3',
                         ),
                       ],
                     ),

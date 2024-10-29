@@ -1,11 +1,11 @@
 import 'package:weather_app/models/types.dart';
 
 enum AirCondition {
-  good('매우 좋음', 'image/moderate.png'),
-  fair('좋음', 'image/moderate.png'),
-  moderate('보통', 'image/moderate.png'),
-  poor('나쁨', 'image/moderate.png'),
-  bad('매우 나쁨', 'image/moderate.png');
+  good('매우 좋음', 'assets/images/moderate.png'),
+  fair('좋음', 'assets/images/moderate.png'),
+  moderate('보통', 'assets/images/moderate.png'),
+  poor('나쁨', 'assets/images/moderate.png'),
+  bad('매우 나쁨', 'assets/images/moderate.png');
 
   final String text;
   final String imagePath;

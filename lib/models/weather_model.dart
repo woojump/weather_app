@@ -1,11 +1,11 @@
 import 'package:weather_app/models/types.dart';
 
 enum WeatherCondition {
-  cloudLightning('svg/climacon-cloud_lightning.svg'),
-  cloudRain('svg/climacon-cloud_rain.svg'),
-  cloudSnow('svg/climacon-cloud_snow_alt.svg'),
-  sun('svg/climacon-sun.svg'),
-  cloudSun('svg/climacon-cloud_sun.svg');
+  cloudLightning('assets/svg/climacon-cloud_lightning.svg'),
+  cloudRain('assets/svg/climacon-cloud_rain.svg'),
+  cloudSnow('assets/svg/climacon-cloud_snow_alt.svg'),
+  sun('assets/svg/climacon-sun.svg'),
+  cloudSun('assets/svg/climacon-cloud_sun.svg');
 
   final String imagePath;
   const WeatherCondition(this.imagePath);

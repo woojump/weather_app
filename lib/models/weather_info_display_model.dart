@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class Model {
+mixin WeatherInfoDisplayModel {
   Widget getWeatherIcon(int condition) {
     if (condition < 300) {
       return SvgPicture.asset('svg/climacon-cloud_lightning.svg');

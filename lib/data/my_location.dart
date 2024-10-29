@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MyLocation {
@@ -6,15 +7,14 @@ class MyLocation {
 
   Future<void> getMyCurrentLocation() async {
     try {
-      // ignore: unused_local_variable
-      LocationPermission permission = await Geolocator.requestPermission();
+      await Geolocator.requestPermission();
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       myLatitude = position.latitude;
       myLongitude = position.longitude;
     } catch (e) {
-      print('error in getMyCurrentLocation()');
+      debugPrint('error in getMyCurrentLocation()');
     }
   }
 }

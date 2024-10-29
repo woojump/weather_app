@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timer_builder/timer_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/models/model.dart';
+import 'package:weather_app/models/weather_info_display_model.dart';
 
 class WeatherScreen extends StatefulWidget {
   final dynamic parseWeatherData;
@@ -18,7 +18,8 @@ class WeatherScreen extends StatefulWidget {
   State<WeatherScreen> createState() => _WeatherScreenState();
 }
 
-class _WeatherScreenState extends State<WeatherScreen> {
+class _WeatherScreenState extends State<WeatherScreen>
+    with WeatherInfoDisplayModel {
   late String cityName;
   var date = DateTime.now();
   late int temperature;
@@ -33,9 +34,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(widget.parseAirData);
     updateData(
       weatherData: widget.parseWeatherData,
       airData: widget.parseAirData,
@@ -46,16 +45,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
     cityName = weatherData['name'];
     double doubleTemperature = weatherData['main']['temp'];
     temperature = doubleTemperature.round();
-
-    Model model = Model();
+    temperature = weatherData['main']['temp'].round();
 
     weatherCondition = weatherData['weather'][0]['id'];
-    weatherIcon = model.getWeatherIcon(weatherCondition);
+    weatherIcon = getWeatherIcon(weatherCondition);
     description = weatherData['weather'][0]['description'];
 
     airCondition = airData['list'][0]['main']['aqi'];
-    airIcon = model.getAirIcon(airCondition);
-    airState = model.getAirState(airCondition);
+    airIcon = getAirIcon(airCondition);
+    airState = getAirState(airCondition);
 
     fineDust = airData['list'][0]['components']['pm2_5'];
     ultraFineDust = airData['list'][0]['components']['pm10'];
@@ -69,23 +67,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.near_me),
-          iconSize: 30.0,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.location_searching),
-            iconSize: 30.0,
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           Image.asset(

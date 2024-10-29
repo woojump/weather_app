@@ -1,11 +1,11 @@
 import 'package:weather_app/models/types.dart';
 
 enum AirCondition {
-  good('매우 좋음', 'assets/images/moderate.png'),
-  fair('좋음', 'assets/images/moderate.png'),
-  moderate('보통', 'assets/images/moderate.png'),
-  poor('나쁨', 'assets/images/moderate.png'),
-  bad('매우 나쁨', 'assets/images/moderate.png');
+  good('매우 좋음', 'images/moderate.png'),
+  fair('좋음', 'images/moderate.png'),
+  moderate('보통', 'images/moderate.png'),
+  poor('나쁨', 'images/moderate.png'),
+  bad('매우 나쁨', 'images/moderate.png');
 
   final String text;
   final String imagePath;
@@ -36,9 +36,9 @@ class AirInfo {
 
   factory AirInfo.fromJson(Json json) {
     return AirInfo(
-      condition: AirCondition.fromInt(json['list'][0]['main']['aqi']),
-      fineDust: json['list'][0]['components']['pm2_5'],
-      ultraFineDust: json['list'][0]['components']['pm10'],
+      condition: AirCondition.fromInt(json['list'][0]['main']['aqi'] as int),
+      fineDust: json['list'][0]['components']['pm2_5'] as double,
+      ultraFineDust: json['list'][0]['components']['pm10'] as double,
     );
   }
 }

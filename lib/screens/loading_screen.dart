@@ -10,7 +10,7 @@ import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/screens/error_screen.dart';
 import 'package:weather_app/screens/weather_screen.dart';
 
-const apiKey = '';
+const apiKey = 'c3ae04a10caa36641aac820113183e41';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -39,20 +39,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Future getLocation() async {
     try {
+      await Future.wait([]);
+
       // 현재 위치 정보를 리포지토리에서 가져옵니다.
       _myLocation = await _locationRepository.getMyCurrentLocation();
       if (_myLocation == null) throw Exception('내 위치를 가져오는 데 실패했습니다.');
       final double latitude = _myLocation!.latitude;
       final double longitude = _myLocation!.longitude;
 
+      // 공기질 정보를 리포지토리에서 가져옵니다.
+      _airInfo = await _airRepository.getAirInfo(latitude, longitude);
+      if (_airInfo == null) throw Exception('공기질 정보를 가져오는 데 실패했습니다.');
+
       // 날씨 정보를 리포지토리에서 가져옵니다.
       _weatherInfo =
           await _weatherRepository.getWeatherInfo(latitude, longitude);
       if (_weatherInfo == null) throw Exception('날씨 정보를 가져오는 데 실패했습니다.');
-
-      // 공기질 정보를 리포지토리에서 가져옵니다.
-      _airInfo = await _airRepository.getAirInfo(latitude, longitude);
-      if (_airInfo == null) throw Exception('공기질 정보를 가져오는 데 실패했습니다.');
 
       if (!mounted) return;
 
@@ -81,7 +83,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       body: Stack(
         children: [
           Image.asset(
-            'image/background.jpg',
+            'images/background.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,

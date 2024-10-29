@@ -24,6 +24,11 @@ class AirRepositoryImpl implements AirRepository {
       debugPrint('API 통신 오류입니다.');
       return null;
     }
-    return AirInfo.fromJson(resultJson);
+    try {
+      return AirInfo.fromJson(resultJson);
+    } catch (e) {
+      debugPrint('공기질 정보를 매핑하는 중 발생한 오류입니다.');
+    }
+    return null;
   }
 }

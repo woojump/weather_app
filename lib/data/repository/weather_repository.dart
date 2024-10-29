@@ -24,6 +24,11 @@ class WeatherRepositoryImpl implements WeatherRepository {
       debugPrint('API 통신 오류입니다.');
       return null;
     }
-    return WeatherInfo.fromJson(resultJson);
+    try {
+      return WeatherInfo.fromJson(resultJson);
+    } catch (e) {
+      debugPrint('날씨 정보를 가져와 매핑 중 발생한 오류입니다: $e');
+      return null;
+    }
   }
 }

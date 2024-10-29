@@ -32,7 +32,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
       body: Stack(
         children: [
           Image.asset(
-            'image/background.jpg',
+            'images/background.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,

@@ -1,11 +1,11 @@
 import 'package:weather_app/models/types.dart';
 
 enum WeatherCondition {
-  cloudLightning('assets/svg/climacon-cloud_lightning.svg'),
-  cloudRain('assets/svg/climacon-cloud_rain.svg'),
-  cloudSnow('assets/svg/climacon-cloud_snow_alt.svg'),
-  sun('assets/svg/climacon-sun.svg'),
-  cloudSun('assets/svg/climacon-cloud_sun.svg');
+  cloudLightning('svg/climacon-cloud_lightning.svg'),
+  cloudRain('svg/climacon-cloud_rain.svg'),
+  cloudSnow('svg/climacon-cloud_snow_alt.svg'),
+  sun('svg/climacon-sun.svg'),
+  cloudSun('svg/climacon-cloud_sun.svg');
 
   final String imagePath;
   const WeatherCondition(this.imagePath);
@@ -37,9 +37,9 @@ class WeatherInfo {
   factory WeatherInfo.fromJson(Json json) {
     return WeatherInfo(
       name: json['name'],
-      temperature: json['main']['temp'],
-      condition: WeatherCondition.fromInt(json['weather']['id']),
-      description: json['weather'][0]['description'],
+      temperature: json['main']['temp'] as double,
+      condition: WeatherCondition.fromInt(json['weather'][0]['id'] as int),
+      description: json['weather'][0]['description'] as String,
     );
   }
 }

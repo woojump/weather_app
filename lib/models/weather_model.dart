@@ -1,5 +1,26 @@
 import 'package:weather_app/models/types.dart';
 
+enum WeatherCondition {
+  cloudLightning('svg/climacon-cloud_lightning.svg'),
+  cloudRain('svg/climacon-cloud_rain.svg'),
+  cloudSnow('svg/climacon-cloud_snow_alt.svg'),
+  sun('svg/climacon-sun.svg'),
+  cloudSun('svg/climacon-cloud_sun.svg');
+
+  final String imagePath;
+  const WeatherCondition(this.imagePath);
+
+  static WeatherCondition fromInt(int i) {
+    return switch (i) {
+      < 300 => WeatherCondition.cloudLightning,
+      < 600 => WeatherCondition.cloudRain,
+      < 700 => WeatherCondition.cloudSnow,
+      800 => WeatherCondition.sun,
+      _ => WeatherCondition.cloudSun,
+    };
+  }
+}
+
 class WeatherInfo {
   final String name;
   final double temperature;
@@ -20,28 +41,5 @@ class WeatherInfo {
       condition: WeatherCondition.fromInt(json['weather']['id']),
       description: json['weather'][0]['description'],
     );
-  }
-}
-
-enum WeatherCondition {
-  good('매우 좋음', 'image/moderate.png'),
-  fair('좋음', 'image/moderate.png'),
-  moderate('보통', 'image/moderate.png'),
-  poor('나쁨', 'image/moderate.png'),
-  bad('매우 나쁨', 'image/moderate.png');
-
-  final String text;
-  final String imagePath;
-  const WeatherCondition(this.text, this.imagePath);
-
-  static WeatherCondition fromInt(int i) {
-    return switch (i) {
-      1 => WeatherCondition.good,
-      2 => WeatherCondition.fair,
-      3 => WeatherCondition.moderate,
-      4 => WeatherCondition.poor,
-      5 => WeatherCondition.bad,
-      _ => throw Exception('존재하지 않는 날씨 상태입니다.'),
-    };
   }
 }

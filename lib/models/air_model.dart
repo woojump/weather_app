@@ -1,22 +1,24 @@
 import 'package:weather_app/models/types.dart';
 
 enum AirCondition {
-  cloudLightning('svg/climacon-cloud_lightning.svg'),
-  cloudRain('svg/climacon-cloud_rain.svg'),
-  cloudSnow('svg/climacon-cloud_snow_alt.svg'),
-  sun('svg/climacon-sun.svg'),
-  cloudSun('svg/climacon-cloud_sun.svg');
+  good('매우 좋음', 'image/moderate.png'),
+  fair('좋음', 'image/moderate.png'),
+  moderate('보통', 'image/moderate.png'),
+  poor('나쁨', 'image/moderate.png'),
+  bad('매우 나쁨', 'image/moderate.png');
 
+  final String text;
   final String imagePath;
-  const AirCondition(this.imagePath);
+  const AirCondition(this.text, this.imagePath);
 
   static AirCondition fromInt(int i) {
     return switch (i) {
-      < 300 => AirCondition.cloudLightning,
-      < 600 => AirCondition.cloudRain,
-      < 700 => AirCondition.cloudSnow,
-      800 => AirCondition.sun,
-      _ => AirCondition.cloudSun,
+      1 => AirCondition.good,
+      2 => AirCondition.fair,
+      3 => AirCondition.moderate,
+      4 => AirCondition.poor,
+      5 => AirCondition.bad,
+      _ => throw Exception('존재하지 않는 날씨 상태입니다.'),
     };
   }
 }
